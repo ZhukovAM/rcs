@@ -25,8 +25,19 @@ namespace rcs {
             SystemState::motionActivated = motionActivated;
         }
 
+        bool isLogicActivated() const
+        {
+            return logicActivated;
+        }
+
+        void setLogicActivated(bool logicActivated)
+        {
+            SystemState::logicActivated = logicActivated;
+        }
+
     private:
         bool motionActivated;
+        bool logicActivated;
 
         std::vector<double> leftHandleSignals;
         std::vector<double> rightHandleSignals;

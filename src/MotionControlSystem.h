@@ -14,6 +14,9 @@ namespace rcs {
     class Response {
     public:
         virtual void process() = 0;
+
+    private:
+        std::shared_ptr<SystemState> systemState;
     };
 
     class Predicate {
@@ -33,7 +36,7 @@ namespace rcs {
                 response->process();
                 fired = true;
             }
-        };
+        }
 
         bool isFired() const {
             return fired;

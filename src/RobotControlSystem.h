@@ -64,6 +64,7 @@ namespace rcs {
             }
 
             if ( systemState->isMotionActivated() ) {
+
                 motionControlSystem->process();
             }
 

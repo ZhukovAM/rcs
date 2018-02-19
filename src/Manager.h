@@ -14,14 +14,21 @@ namespace rcs {
     public:
         void manage(Input &input, Output &output) {
 
-            robotControlSystem->process(input, output);
+            if(systemState->isLogicActivated()){
+                /// Здесь должен быть вызов логических функий (ТОП)
+            }
 
+            if(systemState->isMotionActivated()) {
+                robotControlSystem->process(input, output);
+            }
         }
 
     private:
         std::shared_ptr<SystemState> systemState;
 
         std::shared_ptr<RobotControlSystem> robotControlSystem;
+
+
     };
 }
 

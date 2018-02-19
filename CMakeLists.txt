@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.2)
 
 set(RCS_INCLUDE_DIR ${PROJECT_SOURCE_DIR}/src)
 
