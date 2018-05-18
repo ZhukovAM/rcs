@@ -52,7 +52,12 @@ namespace rcs {
 
     class MotionControlSystem {
     public:
+        void setTrajectory();
+
+        void setController();
+
         void process() {
+
             /// Здесь должен быть TrajectoryChecker, который проверяет завершение траектории
             /// TrajectoryChecker.check()
             /// в каком формате получаем входные данные?
@@ -68,6 +73,8 @@ namespace rcs {
 
     private:
         std::shared_ptr<SystemState> systemState;
+
+
     };
 }
 

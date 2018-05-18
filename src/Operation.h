@@ -6,49 +6,89 @@
 #define PROJECT_OPERATION_H
 
 #include <string>
+#include <iostream>
+#include "StateMachine.h"
 
 namespace rcs {
 
-    class Operation {
-    public:
-        class Status {
-            std::string msg;
-            int code;
-        };
-
-        int getState() const
-        {
-            return state;
-        }
-
-        const Status &getStatus() const
-        {
-            return status;
-        }
-
-        virtual void process() = 0;
-
-    protected:
-        int state;
-        Status status;
+    enum class OperationList {
+        IdleState,
+        FirstOperation,
+        SecondOperation
     };
 
 
-    class MoveToWorkPosition : public Operation {
-    public:
-        enum State {
-            STATE_1,
-            STATE_2,
-            STATE_3
-        };
+    enum class OperationStatus {
+        Running,
+        Finished
+    };
 
-        void process() override {
-            switch (state) {
-                case State::STATE_1: {
+    class Operation {
+    public:
+        explicit Operation(StateMachinePtr pStateMachine)
+                : m_pStateMachine(pStateMachine) {}
+
+        virtual OperationStatus engine() = 0;
+
+    protected:
+        StateMachinePtr m_pStateMachine;
+
+        OperationStatus m_status;
+    };
+
+    using OperationPtr = std::shared_ptr<Operation>;
+
+
+    class FirstOperation : public Operation {
+        using Operation::Operation;
+
+    public:
+        OperationStatus engine() override {
+
+            switch ( m_pStateMachine->getState() ) {
+                case State::FirstState: {
+                    std::cout << "Run FirstOperation" << std::endl;
+                    m_status = OperationStatus::Running;
+
+                    std::cout << "FirstState" << std::endl;
+                    m_pStateMachine->setState(State::SecondState);
                     break;
                 }
-                case STATE_2:
+                case State::SecondState: {
+                    std::cout << "SecondState" << std::endl;
+                    std::cout << "FirstOperation is finished" << std::endl;
+                    m_status = OperationStatus::Finished;
+                }
             }
+
+            return m_status;
+        }
+    };
+
+
+    class SecondOperation : public Operation {
+        using Operation::Operation;
+
+    public:
+        OperationStatus engine() override {
+
+            switch ( m_pStateMachine->getState() ) {
+                case State::FirstState: {
+                    std::cout << "FirstState" << std::endl;
+                    std::cout << "SecondOperation is finished" << std::endl;
+                    m_status = OperationStatus::Finished;
+                    break;
+                }
+                case State::SecondState: {
+                    std::cout << "Run SecondOperation" << std::endl;
+                    m_status = OperationStatus::Running;
+
+                    std::cout << "SecondState" << std::endl;
+                    m_pStateMachine->setState(State::FirstState);
+                }
+            }
+
+            return m_status;
         }
     };
 }

@@ -6,6 +6,10 @@
 #define PROJECT_SYSTEMSTATE_H
 
 #include <vector>
+#include <string>
+#include <memory>
+#include "Actuator.h"
+#include "Operation.h"
 
 namespace rcs {
 
@@ -35,22 +39,20 @@ namespace rcs {
             SystemState::logicActivated = logicActivated;
         }
 
-    private:
+
+    public:
         bool motionActivated;
         bool logicActivated;
+
+        OperationList activeOperation;
+        OperationList requiredOperation;
+
+        bool operationDone;
 
         std::vector<double> leftHandleSignals;
         std::vector<double> rightHandleSignals;
 
-        std::vector<double> positions;   //! Текущее положение шарнирова + крышка + зу
-        std::vector<double> velocities;  //! Скорости шарнирова + крышка + ЗУ
-        std::vector<double> currents;    //! Ток шарниров + крышка + ЗУ
-        std::vector<int>    breakStatuses;  //!
-        std::vector<int>    controlMode;    //! \brief
-
-        std::vector<double> targetJointPositions; //! Целевое положение шарниров + крышка + ЗУ
-
-//    SystemState futureState;
+        std::vector<Actuator> actuators;
 
         int     ctrlType;       //! вид управления: позиц., скорост., динамич., и т.д.
         int     typeCoord;      //! вид задания координат: обобщ., декарт., и т.д.
@@ -66,8 +68,14 @@ namespace rcs {
 
         int         samplerId;          // Значения 0...19
         bool        samplerInGripper;   //! Флаг того что пробоотборник в схвате
+
+        std::string operatorMsg;
     };
+
+    using SystemStatePtr = std::shared_ptr<SystemState>;
 }
+
+
 
 
 
